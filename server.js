@@ -1,12 +1,13 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+// const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 require('dotenv').config();
 
 const app = express()
 app.set('trust proxy', true)
+
 const MYSQL_CON = process.env.MYSQLCONSTRING
 const PORT = process.env.PORT
 
@@ -25,10 +26,10 @@ app.use(cors({
 }));
 
 // Set rate limit
-app.use(rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
-}));
+// app.use(rateLimit({
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     max: 100 // limit each IP to 100 requests per windowMs
+// }));
 
 // Check direct access to database through url of endpoints
 
