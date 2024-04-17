@@ -6,6 +6,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const app = express()
+app.set('trust proxy', true)
 const MYSQL_CON = process.env.MYSQLCONSTRING
 const PORT = process.env.PORT
 
