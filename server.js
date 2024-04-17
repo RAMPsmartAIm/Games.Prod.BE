@@ -1,7 +1,6 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
-// const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 require('dotenv').config();
 
@@ -23,11 +22,6 @@ app.use(cors({
     optionsSuccessStatus: 200 // Return 200 for successful OPTIONS requests
 }));
 
-// Set rate limit
-// app.use(rateLimit({
-//     windowMs: 15 * 60 * 1000, // 15 minutes
-//     max: 100 // limit each IP to 100 requests per windowMs
-// }));
 
 // Check direct access to database through url of endpoints
 
@@ -40,15 +34,6 @@ const db = mysql.createConnection({
     port: process.env.DBPORT,
     database: process.env.DBNAME,
 });
-
-// Log to database
-// const db = mysql.createConnection({
-//     username: "doadmin",
-//     password:"AVNS_W0Yt6YIO1n5f14d5rP2",
-//     host: "db-mysql-fra1-games-do-user-8614869-0.c.db.ondigitalocean.com",
-//     port: "25060",
-//     database: "quiz_database",
-// });
 
 db.connect((err) => {
     if (err) {
