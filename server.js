@@ -7,10 +7,8 @@ require('dotenv').config();
 
 const app = express()
 app.set('trust proxy', true)
-
-const MYSQL_CON = process.env.MYSQLCONSTRING
+const fs = require('fs');
 const PORT = process.env.PORT
-
 
 // Secure Server-side ////////////////////////////////////// 
 
@@ -35,11 +33,34 @@ app.use(cors({
 
 /////////////////////////////////////////////////////////////
 
-// Log to database
 const db = mysql.createConnection({
-    MYSQL_CON
-})
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    host: process.env.HOST,
+    port: process.env.DBPORT,
+    database: process.env.DBNAME,
+});
 
+// Log to database
+// const db = mysql.createConnection({
+//     username: "doadmin",
+//     password:"AVNS_W0Yt6YIO1n5f14d5rP2",
+//     host: "db-mysql-fra1-games-do-user-8614869-0.c.db.ondigitalocean.com",
+//     port: "25060",
+//     database: "quiz_database",
+// });
+
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database: ' + err.stack);
+        return;
+    }
+    console.log('Connected to database with thread ID: ' + db.threadId);
+});
+
+db.on('error', (err) => {
+    console.error(`Database error: ${err.message}`);
+});
 // End points
 app.get("/question/:id", (req, res)=> {
     const questionId = req.params.id;

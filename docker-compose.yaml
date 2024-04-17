@@ -1,0 +1,13 @@
+version: "3"
+services: 
+  gamebe:
+    build: 
+      dockerfile: ./Dockerfile
+    environment:
+      USER: ${USER}
+      HOST: ${HOST}
+      PASSWORD: ${PASSWORD}
+      DBPORT: ${DBPORT}
+      DBNAME: ${DBNAME}
+    ports: 
+      - "8080:8080"   
