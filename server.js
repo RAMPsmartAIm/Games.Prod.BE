@@ -3,9 +3,6 @@ const mysql = require('mysql');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
-// HTTPS
-// const https = require('https');
-// const fs = require('fs');
 require('dotenv').config();
 
 const app = express()
@@ -64,11 +61,3 @@ app.get("/questions_len", (req, res)=> {
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)
 })
-
-// HTTPS
-// const options = {
-//     key: fs.readFileSync('path/to/privatekey.pem'),
-//     cert: fs.readFileSync('path/to/certificate.pem')
-// };
-  
-// https.createServer(options, app).listen(443);
