@@ -27,25 +27,51 @@ app.use(cors({
 
 /////////////////////////////////////////////////////////////
 
-const db = mysql.createConnection({
+// Create a connection pool rather than a single connection
+const db = mysql.createPool({
+    connectionLimit: 10, // Adjust based on your application's requirement
+    host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
-    host: process.env.HOST,
     port: process.env.DBPORT,
-    database: process.env.DBNAME,
+    database: process.env.DBNAME
 });
 
-db.connect((err) => {
+// Attempt to get a connection from the pool
+db.getConnection((err, connection) => {
     if (err) {
         console.error('Error connecting to the database: ' + err.stack);
         return;
     }
-    console.log('Connected to database with thread ID: ' + db.threadId);
+    console.log('Connected to database with thread ID: ' + connection.threadId);
+
+    // When done with the connection, release it back to the pool
+    connection.release();
 });
 
-db.on('error', (err) => {
-    console.error(`Database error: ${err.message}`);
+// Handle connection errors for connections that are already in use
+db.on('acquire', (connection) => {
+    console.log('Connection %d acquired', connection.threadId);
 });
+
+db.on('release', (connection) => {
+    console.log('Connection %d released', connection.threadId);
+});
+
+// Catch errors on the pool
+db.on('error', (err) => {
+    console.error('Database error: ' + err.message);
+    // Handle error and possibly re-establish connection here
+});
+
+setInterval(() => {
+    db.query('SELECT 1', (err, results) => {
+        if (err) {
+            console.error('Error when sending keepalive query to MySQL.');
+        }
+    });
+}, 600000); // every 10 minutes
+
 // End points
 app.get("/question/:id", (req, res)=> {
     const questionId = req.params.id;
