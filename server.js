@@ -93,21 +93,20 @@ app.get("/questions_len", (req, res) => {
   });
 });
 
-app.get("/quizgenres", (req, res) => {
-  console.log("Request received");
-  
-  // const allowedList = ["sk"];
-  // if (allowedList.includes(langParam)) {
-  //   const sql = `SELECT * FROM moviegenre_${langParam};`; // Concatenate the table name based on the langParam
+app.get("/quizgenres/:lang", (req, res) => {
+  const langParam = req.params.lang;
+  const allowedList = ["sk"];
+  if (allowedList.includes(langParam)) {
+    const sql = `SELECT * FROM moviegenre_${langParam};`; // Concatenate the table name based on the langParam
 
-  //   db.query(sql, (err, data) => {
-  //     if (err) return res.json(err);
-  //     return res.json(data);
-  //   });
-  // } else {
-  //   // If langParam is not in the allowedList, return an error response
-  //   res.status(400).json({ error: "Invalid language parameter" });
-  // }
+    db.query(sql, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  } else {
+    // If langParam is not in the allowedList, return an error response
+    res.status(400).json({ error: "Invalid language parameter" });
+  }
 });
 
 app.get("/quizquestion_set/:lang/:id", (req, res) => {
